@@ -234,13 +234,13 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
   <div class="sheet" id="sheet">
     <div class="sheet-handle"></div>
 
-    <!-- STEP 1: Contact Info -->
+    <!-- STEP 1: All Info -->
     <div class="sheet-step on" id="ss1">
       <div class="prog-track">
-        <div class="prog-seg now"></div><div class="prog-seg"></div><div class="prog-seg"></div>
+        <div class="prog-seg now"></div><div class="prog-seg"></div>
       </div>
-      <div class="prog-meta"><b>Step 1 of 3 — Your Details</b><span>~30 sec</span></div>
-      <div class="st-title">Let's Get Started</div>
+      <div class="prog-meta"><b>Step 1 of 2 — Your Details</b><span>~30 sec</span></div>
+      <div class="st-title">Check Your Availability</div>
       <div class="st-sub">Enter your info to see if T-Mobile 5G Home Internet is available for you.</div>
 
       <div class="offer-recap">
@@ -273,12 +273,19 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
         <input type="email" id="em" placeholder="jane@email.com" inputmode="email" autocomplete="email">
         <div class="ferr" id="em-e">Valid email required.</div>
       </div>
-      <div class="field">
-        <label>Street Address</label>
-        <input type="text" id="streetaddress" placeholder="123 Main Street" autocomplete="street-address">
-        <div class="ferr" id="saddr-e">Required.</div>
+      <div class="frow">
+        <div class="field">
+          <label>Street Address</label>
+          <input type="text" id="streetaddress" placeholder="123 Main Street" autocomplete="street-address">
+          <div class="ferr" id="saddr-e">Required.</div>
+        </div>
+        <div class="field">
+          <label>ZIP Code</label>
+          <input type="tel" id="zip" placeholder="90210" maxlength="5" inputmode="numeric">
+          <div class="ferr" id="zip-e">Valid ZIP.</div>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="goS2()">Next →</button>
+      <button class="btn btn-primary" onclick="goS2()">See My Offer →</button>
       <div class="trust">
         <div class="trust-i"><span>✓</span> Secure</div>
         <div class="trust-i"><span>✓</span> No spam</div>
@@ -286,34 +293,13 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
       </div>
     </div>
 
-    <!-- STEP 2: ZIP Code -->
-    <div class="sheet-step" id="ss2">
-      <div class="prog-track">
-        <div class="prog-seg done"></div><div class="prog-seg now"></div><div class="prog-seg"></div>
-      </div>
-      <div class="prog-meta"><b>Step 2 of 3 — Your Area</b><span>~30 sec</span></div>
-      <button class="btn-back" onclick="goStep(1)">← Back</button>
-      <div class="st-title">Check Your Area</div>
-      <div class="st-sub">Enter your ZIP to confirm today's offer is available near you.</div>
-      <div class="urg">
-        <span style="font-size:17px;flex-shrink:0">⚡</span>
-        <div class="urg-text"><b>High demand:</b> Promotional slots are filling in many ZIP codes.</div>
-      </div>
-      <div class="field">
-        <label>ZIP Code</label>
-        <input type="tel" id="zip" placeholder="90210" maxlength="5" inputmode="numeric">
-        <div class="ferr" id="zip-e">Valid 5-digit ZIP.</div>
-      </div>
-      <button class="btn btn-primary" onclick="goS3()">Check My Area →</button>
-    </div>
-
     <!-- STEP 3: Consent + Submit -->
     <div class="sheet-step" id="ss3">
       <div class="prog-track">
-        <div class="prog-seg done"></div><div class="prog-seg done"></div><div class="prog-seg now"></div>
+        <div class="prog-seg done"></div><div class="prog-seg now"></div>
       </div>
-      <div class="prog-meta"><b>Step 3 of 3 — Unlock Offer</b><span>Last step!</span></div>
-      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <div class="prog-meta"><b>Step 2 of 2 — Unlock Offer</b><span>Last step!</span></div>
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
       <div class="st-title">Confirm & Unlock</div>
       <div class="st-sub">Review your offer and submit to see your personalized promotion.</div>
       <div class="urg">
@@ -372,20 +358,15 @@ function goS2(){
   const p=val('ph','ph-e',v=>v.replace(/\D/g,'').length>=10);
   const e=val('em','em-e',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()));
   const a=val('streetaddress','saddr-e',v=>v.trim().length>3);
-  if(!f||!l||!p||!e||!a) return;
+  const z=val('zip','zip-e',v=>/^\d{5}$/.test(v.trim()));
+  if(!f||!l||!p||!e||!a||!z) return;
   formData.firstName = document.getElementById('fn').value.trim();
   formData.lastName  = document.getElementById('ln').value.trim();
   formData.fullName  = formData.firstName + ' ' + formData.lastName;
   formData.phone     = document.getElementById('ph').value.trim();
   formData.email     = document.getElementById('em').value.trim();
   formData.address   = document.getElementById('streetaddress').value.trim();
-  goStep(2);
-}
-
-function goS3(){
-  const z=val('zip','zip-e',v=>/^\d{5}$/.test(v.trim()));
-  if(!z) return;
-  formData.zip = document.getElementById('zip').value.trim();
+  formData.zip       = document.getElementById('zip').value.trim();
   goStep(3);
 }
 
