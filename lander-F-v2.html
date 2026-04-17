@@ -274,6 +274,11 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
         <input type="email" id="em" placeholder="jane@email.com" inputmode="email" autocomplete="email">
         <div class="ferr" id="em-e">Valid email required.</div>
       </div>
+      <div class="field">
+        <label>Street Address</label>
+        <input type="text" id="streetaddress" placeholder="123 Main Street" autocomplete="street-address">
+        <div class="ferr" id="saddr-e">Required.</div>
+      </div>
       <button class="btn btn-primary" onclick="goS2()">Next →</button>
       <div class="trust">
         <div class="trust-i"><span>✓</span> Secure</div>
@@ -282,7 +287,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
       </div>
     </div>
 
-    <!-- STEP 2: ZIP + Address -->
+    <!-- STEP 2: ZIP Code -->
     <div class="sheet-step" id="ss2">
       <div class="prog-track">
         <div class="prog-seg done"></div><div class="prog-seg now"></div><div class="prog-seg"></div>
@@ -290,15 +295,10 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
       <div class="prog-meta"><b>Step 2 of 3 — Your Area</b><span>~30 sec</span></div>
       <button class="btn-back" onclick="goStep(1)">← Back</button>
       <div class="st-title">Check Your Area</div>
-      <div class="st-sub">Enter your address to confirm today's offer is available near you.</div>
+      <div class="st-sub">Enter your ZIP to confirm today's offer is available near you.</div>
       <div class="urg">
         <span style="font-size:17px;flex-shrink:0">⚡</span>
         <div class="urg-text"><b>High demand:</b> Promotional slots are filling in many ZIP codes.</div>
-      </div>
-      <div class="field">
-        <label>Street Address</label>
-        <input type="text" id="streetaddress" placeholder="123 Main Street" autocomplete="street-address">
-        <div class="ferr" id="saddr-e">Required.</div>
       </div>
       <div class="field">
         <label>ZIP Code</label>
@@ -372,21 +372,21 @@ function goS2(){
   const l=val('ln','ln-e',v=>v.trim().length>0);
   const p=val('ph','ph-e',v=>v.replace(/\D/g,'').length>=10);
   const e=val('em','em-e',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()));
-  if(!f||!l||!p||!e) return;
+  const a=val('streetaddress','saddr-e',v=>v.trim().length>3);
+  if(!f||!l||!p||!e||!a) return;
   formData.firstName = document.getElementById('fn').value.trim();
   formData.lastName  = document.getElementById('ln').value.trim();
   formData.fullName  = formData.firstName + ' ' + formData.lastName;
   formData.phone     = document.getElementById('ph').value.trim();
   formData.email     = document.getElementById('em').value.trim();
+  formData.address   = document.getElementById('streetaddress').value.trim();
   goStep(2);
 }
 
 function goS3(){
-  const a=val('streetaddress','saddr-e',v=>v.trim().length>3);
   const z=val('zip','zip-e',v=>/^\d{5}$/.test(v.trim()));
-  if(!a||!z) return;
-  formData.address = document.getElementById('streetaddress').value.trim();
-  formData.zip     = document.getElementById('zip').value.trim();
+  if(!z) return;
+  formData.zip = document.getElementById('zip').value.trim();
   goStep(3);
 }
 
