@@ -293,22 +293,15 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;back
         <span style="font-size:17px;flex-shrink:0">⚡</span>
         <div class="urg-text"><b>High demand:</b> Promotional slots are filling in many ZIP codes.</div>
       </div>
-      <div class="frow">
-        <div class="field">
-          <label>ZIP Code</label>
-          <input type="tel" id="zip" placeholder="90210" maxlength="5" inputmode="numeric">
-          <div class="ferr" id="zip-e">Valid 5-digit ZIP.</div>
-        </div>
-        <div class="field">
-          <label>Street #</label>
-          <input type="tel" id="streetnum" placeholder="123" inputmode="numeric">
-          <div class="ferr" id="snum-e">Required.</div>
-        </div>
+      <div class="field">
+        <label>Street Address</label>
+        <input type="text" id="streetaddress" placeholder="123 Main Street" autocomplete="street-address">
+        <div class="ferr" id="saddr-e">Required.</div>
       </div>
       <div class="field">
-        <label>Street Name</label>
-        <input type="text" id="streetname" placeholder="Main Street">
-        <div class="ferr" id="sname-e">Required.</div>
+        <label>ZIP Code</label>
+        <input type="tel" id="zip" placeholder="90210" maxlength="5" inputmode="numeric">
+        <div class="ferr" id="zip-e">Valid 5-digit ZIP.</div>
       </div>
       <button class="btn btn-primary" onclick="goS3()">Check My Area →</button>
     </div>
@@ -387,12 +380,11 @@ function goS2(){
 }
 
 function goS3(){
+  const a=val('streetaddress','saddr-e',v=>v.trim().length>3);
   const z=val('zip','zip-e',v=>/^\d{5}$/.test(v.trim()));
-  const n=val('streetnum','snum-e',v=>v.trim().length>0);
-  const s=val('streetname','sname-e',v=>v.trim().length>2);
-  if(!z||!n||!s) return;
+  if(!a||!z) return;
+  formData.address = document.getElementById('streetaddress').value.trim();
   formData.zip     = document.getElementById('zip').value.trim();
-  formData.address = document.getElementById('streetnum').value.trim()+' '+document.getElementById('streetname').value.trim();
   goStep(3);
 }
 
